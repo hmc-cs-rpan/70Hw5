@@ -1,6 +1,6 @@
 /**
  * \file intlist.hpp
- * \authors YOUR NAMES HERE
+ * \authors Iris Liu, Ricky Pan
  * \brief A list of ints.
  */
 
@@ -27,12 +27,10 @@ private:
 
 public:
 
-    // IF DEFAULTS ARE NOT RIGHT (AND THEY PROBABLY AREN'T)
-    // YOU SHOULD REMOVE "= default" AND THIS COMMENT, AND WRITE
-    // YOUR OWN CODE IN THE .cpp FILE
-    IntList() = default;
-    IntList(const IntList& orig) = default;
+    IntList();
+    IntList(const IntList& orig);
     IntList& operator= (const IntList& rhs);
+    // todo: destructor after creating iterator
     ~IntList() = default;
     void swap(IntList& rhs);
 
@@ -42,6 +40,7 @@ public:
 
     size_t size() const;            ///< Size of the list
     bool empty() const;             ///< true if the list is empty
+    int frontVal() const;           ///< Returns the value at the front_
  
     bool operator==(const IntList& rhs) const;
     bool operator!=(const IntList& rhs) const;

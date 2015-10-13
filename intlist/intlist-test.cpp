@@ -49,6 +49,51 @@ void pushFrontTest()
   assert(myList.size() == 1001);
 }
 
+/** \brief Test push_back
+ *  \detail Does 1000 inserts at the back of the list.
+ *     Does not (yet) check whether the resulting list contents are
+ *     correct, but it's a good sign if this works without
+ *     crashing or valgrind errors.
+ */
+void pushBackTest()
+{
+  std::cout << "Testing push_back" << std::endl;
+
+  IntList myList;
+
+  myList.push_back(99999);
+  assert(myList.size() == 1);
+
+  for (size_t i = 0; i != 1000; ++i) {
+     myList.push_back(i);
+  }
+
+  assert(myList.size() == 1001);
+  assert(myList.frontVal() == 99999);
+}
+
+/** \brief Test pop_front
+ *  \detail Does 1000 inserts at the back of the list. And pops the
+ *     first element. Checks the post-popping size and the popped
+ *     element.
+ */
+void popFrontTest()
+{
+  std::cout << "Testing pop_front" << std::endl;
+
+  IntList myList;
+
+  myList.push_back(99999);
+  assert(myList.size() == 1);
+
+  for (size_t i = 0; i != 1000; ++i) {
+     myList.push_back(i);
+  }
+
+  assert(myList.pop_front() == 99999);
+  assert(myList.size() == 1000);
+}
+
 /** \brief Test copy constructor for IntLists
  *  \detail Copies a 1000-element list.
  *     Does not (yet) check whether the resulting list contents are
@@ -81,11 +126,12 @@ void copyConstructorTest()
   assert(myList.size() == 2000);
 }
 
-
 int main(int, const char**)
 {
     defaultConstructorTest();
     pushFrontTest();
+    pushBackTest();
+    popFrontTest();
     //copyConstructorTest();  // uncomment this line, when you're ready
 
     // Unix "success" value

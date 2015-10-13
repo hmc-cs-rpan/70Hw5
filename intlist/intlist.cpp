@@ -1,6 +1,6 @@
 /*
  * \file intlist.cpp
- * \authors YOUR NAMES HERE
+ * \authors Iris Liu, Ricky Pan
  * \brief Implemenation of IntList and its private classes.
  */
 
@@ -10,6 +10,20 @@
 #include <cassert>
 
 using namespace std;
+
+IntList::IntList(): size_(0)
+{
+    back_ = nullptr;
+    front_ = nullptr;
+}
+
+IntList::IntList(const IntList& orig)
+{
+    size_ = orig.size_;
+    back_ = orig.back_;
+    front_ = orig.front_;
+    //iterator to copy all integer values
+}
 
 void IntList::swap(IntList& rhs)
 {
@@ -43,16 +57,17 @@ IntList& IntList::operator=(const IntList& rhs)
 
 size_t IntList::size() const
 {
-    // This doesn't look right...
-
-    return 0;
+    return size_;
 }
 
 bool IntList::empty() const
 {
-    // This doesn't look right...
+    return size_ == 0;
+}
 
-    return true;
+int IntList::frontVal() const
+{
+    return (*front_).value_;
 }
 
 
@@ -69,24 +84,35 @@ bool IntList::operator!=(const IntList& rhs) const
     return !operator==(rhs);
 }
 
-
 void IntList::push_front(int pushee)
-{
-  // This doesn't look right...
+{   
+    // Create a pointer to element to push with next_ = current front
+    // Changes front_ to new element, increment size_
+    Element* toPushPtr = new Element(pushee, front_);
+    front_ = toPushPtr;
+    size_++; 
 }
 
 
 int IntList::pop_front()
 {
-  // This doesn't look right...
+    int toReturn = (*front_).value_;
+    (*front_).next_ = front_;
+    size_--;
 
-  return 42;
+    return toReturn;
 }
 
-
+    
 void IntList::push_back(int pushee)
 {
-  // This doesn't look right...
+    // Create a pointer to element to push with next_ = nullptr
+    // Changes back_'s pointer to point to new element
+    // Set back_ to new element, increment size_
+    Element* toPushPtr = new Element(pushee, nullptr);
+    (*back_).next_ = toPushPtr;
+    back_ = toPushPtr;
+    size_++; 
 }
 
 
