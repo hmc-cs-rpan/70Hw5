@@ -79,7 +79,7 @@ private:
         Element& operator=(const Element&) = delete;
         ~Element() = default;  // If you don't like this, you can change it.
 
-        friend class IntList;
+        friend class Iterator;
     };
 
     Element* back_;   ///< Current tail of list
@@ -115,6 +115,7 @@ private:
 
     private:
         friend class IntList;
+        friend struct Element;
         Iterator(Element* current);  ///< Friends create non-default iterators
         Element* current_;           ///< The current list node
     };

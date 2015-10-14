@@ -25,10 +25,10 @@ IntList::IntList(const IntList& orig)
     //iterator to copy all integer values
 }
 
-/*IntList::~Element()
+ //COME BACK AFTER ITERATOR
+/*~IntList()
 {   
-    //Deletes the pointer in the object
-    delete next_; 
+    delete ??
 }
 */
 
@@ -80,7 +80,13 @@ int IntList::frontVal() const
 
 bool IntList::operator==(const IntList& rhs) const
 {
-    // This doesn't look right...
+    for(Element* i = this.begin(); i != this.end(); ++i)
+    {
+        for(Elements* j = rhs.begin(); j != rhs.end() ++j)
+        {
+            if(i==j )
+        }
+    }
 
     return (rhs.size() > 0);
 }
@@ -104,30 +110,41 @@ void IntList::push_front(int pushee)
         back_ = toPushPtr;
     }
     
-    delete toPushPtr;
 }
 
 
 int IntList::pop_front()
 {
-    // Find the value_ of the front element
-    int popValue = (*front_).value_;
+    // Check if list is empty
+    if (front_ == nullptr)
+    {
+        cout << "List is empty" << endl;
+        return 0;
+    }
 
-    cout << "Popped value " << popValue << endl;
-    // Create a temporary placeholder for our second element
-    Element* second = (*front_).next_;
-    // Delete our popped element
-    //delete front_;
+    else
+    {
+        // Find the value_ of the front element
+        int popValue = (*front_).value_;
+
+        cout << "Popped value " << popValue << endl;
+        // Create a temporary placeholder for our second element
+
+        Element* second = (*front_).next_;
+        // Delete our popped element
+        delete front_;
     
-    // Assign new front to second element, delete placeholder
-    // Decrement size_
-    front_ = second;
-    delete second;
-    size_--;
+        // Assign new front to second element, delete placeholder
+        // Decrement size_
+        front_ = second;
+        //delete second;
+        size_--;
 
 
-    return popValue;
+        return popValue;
+    }    
 }
+
 
     
 void IntList::push_back(int pushee)
@@ -169,17 +186,13 @@ void IntList::insert_after(iterator where, int value)
 
 IntList::iterator IntList::begin() const
 {
-    // This doesn't look right...
-
-    assert(0);
+    return Iterator{front_};
 }
 
 
 IntList::iterator IntList::end() const
 {
-    // This doesn't look right...
-
-    assert(0);
+    return Iterator{front_ + size_};
 }
 
 // --------------------------------------
@@ -205,26 +218,23 @@ IntList::Iterator::Iterator(Element* current)
 
 IntList::Iterator& IntList::Iterator::operator++()
 {
-    // This doesn't look right... shouldn't the
-    // iterator change before it's returned?
-
+    // Forward march!
+    ++current_;
     return *this;
 }
 
 
 int& IntList::Iterator::operator*() const
 {
-    // This doesn't look right...
-
-    assert(0);
+    // Return the element current_ points to
+    return *current_;
 }
 
 
 bool IntList::Iterator::operator==(const Iterator& rhs) const
 {
-    // This doesn't look right...
-
-    return (rhs.current_ != nullptr);
+    // Checks if two iterators point to the same element
+    return current_ == rhs.current_;
 }
 
 
