@@ -78,11 +78,14 @@ private:
         Element(const Element&) = delete;
         Element& operator=(const Element&) = delete;
         ~Element() = default;  // If you don't like this, you can change it.
+
+        friend class IntList;
     };
 
     Element* back_;   ///< Current tail of list
     Element* front_;  ///< Current head of list
     size_t   size_;   ///< Current size of list
+    
 
     /***
      * \class Iterator
@@ -111,6 +114,7 @@ private:
         bool operator!=(const Iterator& rhs) const;
 
     private:
+        friend class IntList;
         Iterator(Element* current);  ///< Friends create non-default iterators
         Element* current_;           ///< The current list node
     };

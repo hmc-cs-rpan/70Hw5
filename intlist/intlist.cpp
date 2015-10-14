@@ -25,6 +25,13 @@ IntList::IntList(const IntList& orig)
     //iterator to copy all integer values
 }
 
+/*IntList::~Element()
+{   
+    //Deletes the pointer in the object
+    delete next_; 
+}
+*/
+
 void IntList::swap(IntList& rhs)
 {
     // This is the canonical way to swap arbitrary types; this incantation
@@ -91,16 +98,35 @@ void IntList::push_front(int pushee)
     Element* toPushPtr = new Element(pushee, front_);
     front_ = toPushPtr;
     size_++; 
+
+    if (size_ == 1)
+    {
+        back_ = toPushPtr;
+    }
+    
+    delete toPushPtr;
 }
 
 
 int IntList::pop_front()
 {
-    int toReturn = (*front_).value_;
-    (*front_).next_ = front_;
+    // Find the value_ of the front element
+    int popValue = (*front_).value_;
+
+    cout << "Popped value " << popValue << endl;
+    // Create a temporary placeholder for our second element
+    Element* second = (*front_).next_;
+    // Delete our popped element
+    //delete front_;
+    
+    // Assign new front to second element, delete placeholder
+    // Decrement size_
+    front_ = second;
+    delete second;
     size_--;
 
-    return toReturn;
+
+    return popValue;
 }
 
     
@@ -109,10 +135,29 @@ void IntList::push_back(int pushee)
     // Create a pointer to element to push with next_ = nullptr
     // Changes back_'s pointer to point to new element
     // Set back_ to new element, increment size_
-    Element* toPushPtr = new Element(pushee, nullptr);
-    (*back_).next_ = toPushPtr;
-    back_ = toPushPtr;
-    size_++; 
+    
+    // When empty, push_front and push_back are the same
+    if (size_ == 0)
+    {
+        Element* toPushPtr = new Element(pushee, front_);
+        front_ = toPushPtr;
+        back_ = toPushPtr;
+        size_++; 
+
+        delete toPushPtr;
+    }
+
+    else
+
+    {
+        Element* toPushPtr = new Element(pushee, nullptr);
+        (*back_).next_ = toPushPtr;
+        back_ = toPushPtr;
+        size_++; 
+
+        delete toPushPtr;
+    }
+
 }
 
 
