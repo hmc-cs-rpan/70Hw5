@@ -137,7 +137,7 @@ void intListIteratorTestOne()
 
     size_t counter = 0;
 
-    for (Element* i = myList.begin(); i != myList.end(); ++i)
+    for (IntList::iterator i = myList.begin(); i != myList.end(); ++i)
     {
         counter++;
     }

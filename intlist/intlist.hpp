@@ -81,7 +81,8 @@ private:
 
         friend class Iterator;
     };
-
+    
+    friend class Iterator;
     Element* back_;   ///< Current tail of list
     Element* front_;  ///< Current head of list
     size_t   size_;   ///< Current size of list
@@ -114,6 +115,7 @@ private:
         bool operator!=(const Iterator& rhs) const;
 
     private:
+        // Reference to intList?
         friend class IntList;
         friend struct Element;
         Iterator(Element* current);  ///< Friends create non-default iterators
