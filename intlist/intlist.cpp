@@ -25,12 +25,14 @@ IntList::IntList(const IntList& orig)
     //iterator to copy all integer values
 }
 
- //COME BACK AFTER ITERATOR
-/*~IntList()
+IntList::~IntList()
 {   
-    delete ??
+    for (IntList::iterator i = begin(); i != end(); ++i)
+    {
+        delete i.current_;
+    }
 }
-*/
+
 
 void IntList::swap(IntList& rhs)
 {
@@ -74,21 +76,33 @@ bool IntList::empty() const
 
 int IntList::frontVal() const
 {
-    return (*front_).value_;
+    return front_ -> value_;
 }
 
 
 bool IntList::operator==(const IntList& rhs) const
 {
-    for(Element* i = this.begin(); i != this.end(); ++i)
+    if(size_ != rhs.size_)
     {
-        for(Elements* j = rhs.begin(); j != rhs.end() ++j)
-        {
-            if(i==j )
-        }
+        return false;
     }
 
-    return (rhs.size() > 0);
+    Iterator a = Iterator(this -> front_);
+    Iterator b = Iterator(rhs.front_);
+
+    for(size_t i = 0; i < size_; ++i)
+    {
+        if(a != b)
+        {
+            return false;
+        }
+        else
+        {
+            ++a;
+            ++b;
+        }
+    }
+    return true;
 }
 
 bool IntList::operator!=(const IntList& rhs) const
@@ -125,12 +139,12 @@ int IntList::pop_front()
     else
     {
         // Find the value_ of the front element
-        int popValue = (*front_).value_;
+        int popValue = front_ -> value_;
 
         cout << "Popped value " << popValue << endl;
         // Create a temporary placeholder for our second element
 
-        Element* second = (*front_).next_;
+        Element* second = front_ -> next_;
         // Delete our popped element
         delete front_;
     
@@ -227,7 +241,7 @@ IntList::Iterator& IntList::Iterator::operator++()
 int& IntList::Iterator::operator*() const
 {
     // Return the element current_ points to
-    return *current_;
+    return current_ -> value_;
 }
 
 

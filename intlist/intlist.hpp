@@ -31,7 +31,7 @@ public:
     IntList(const IntList& orig);
     IntList& operator= (const IntList& rhs);
     // todo: destructor after creating iterator
-    ~IntList() = default;
+    ~IntList();
     void swap(IntList& rhs);
 
     void push_front(int pushee);    ///< Push onto head of list
