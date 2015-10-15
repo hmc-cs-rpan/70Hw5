@@ -19,17 +19,24 @@ IntList::IntList(): size_(0)
 
 IntList::IntList(const IntList& orig)
 {
-    size_ = orig.size_;
-    back_ = orig.back_;
-    front_ = orig.front_;
-    //iterator to copy all integer values
+    // initialize default values for an IntList
+    size_ = 0;
+    front_ = nullptr;
+    back_ = nullptr;
+
+    // pushes all of the elements in orig into our list
+    for(Iterator a = orig.begin(); a != orig.end(); ++a)
+    {
+        push_back(*a);
+    }
 }
 
 IntList::~IntList()
 {   
-    for (IntList::iterator i = begin(); i != end(); ++i)
+    // we use pop_front to pop all elements until front_ = nullptr
+    while(front_ != nullptr)
     {
-        delete i.current_;
+        pop_front();
     }
 }
 
@@ -76,28 +83,34 @@ bool IntList::empty() const
 
 int IntList::frontVal() const
 {
+    // helper function to access the value of the first element
     return front_ -> value_;
 }
 
 
 bool IntList::operator==(const IntList& rhs) const
 {
+    // check that both lists are same size
     if(size_ != rhs.size_)
     {
         return false;
     }
 
-    Iterator a = Iterator(this -> front_);
-    Iterator b = Iterator(rhs.front_);
+    // initializes 1 iterator to loop through each list
+    Iterator a = front_;
+    Iterator b = rhs.front_;
 
+    // compares each element's value in each position
+    // if any one fails, returns false
     for(size_t i = 0; i < size_; ++i)
     {
-        if(a != b)
+        if(*a != *b)
         {
             return false;
         }
         else
         {
+            // increments iterators
             ++a;
             ++b;
         }
@@ -123,9 +136,7 @@ void IntList::push_front(int pushee)
     {
         back_ = toPushPtr;
     }
-    
 }
-
 
 int IntList::pop_front()
 {
@@ -135,78 +146,73 @@ int IntList::pop_front()
         cout << "List is empty" << endl;
         return 0;
     }
-
     else
     {
-        // Find the value_ of the front element
+        // Store front value to return later
         int popValue = front_ -> value_;
 
-        cout << "Popped value " << popValue << endl;
         // Create a temporary placeholder for our second element
-
         Element* second = front_ -> next_;
-        // Delete our popped element
         delete front_;
     
-        // Assign new front to second element, delete placeholder
-        // Decrement size_
+        // Assign new front to second element and decrement size_
         front_ = second;
-        //delete second;
         size_--;
-
 
         return popValue;
     }    
 }
-
-
     
 void IntList::push_back(int pushee)
 {
     // Create a pointer to element to push with next_ = nullptr
-    // Changes back_'s pointer to point to new element
     // Set back_ to new element, increment size_
     
-    // When empty, push_front and push_back are the same
+    // When empty, make front_ and back_ point to added element
     if (size_ == 0)
     {
-        Element* toPushPtr = new Element(pushee, front_);
+        Element* toPushPtr = new Element(pushee, nullptr);
         front_ = toPushPtr;
         back_ = toPushPtr;
         size_++; 
-
-        delete toPushPtr;
     }
-
+    // Else change back_ to point to added element
     else
-
     {
         Element* toPushPtr = new Element(pushee, nullptr);
-        (*back_).next_ = toPushPtr;
+        back_ -> next_ = toPushPtr;
         back_ = toPushPtr;
         size_++; 
-
-        delete toPushPtr;
     }
 
 }
 
-
 void IntList::insert_after(iterator where, int value)
 {
-    // This doesn't look right...
+    // store the pointer to element after current_ in newNext
+    Element* newNext = where.current_ -> next_;
+
+    // toPushPtr points to new element, links new element to
+    // rest of the IntList
+    Element* toPushPtr = new Element(value, newNext);
+
+    // connect the first part of the intList to new element
+    where.current_ -> next_ = toPushPtr;
+    size_++;
 }
 
 
 IntList::iterator IntList::begin() const
 {
-    return Iterator{front_};
+    // we want the address of the first element
+    return Iterator(front_);
 }
 
 
 IntList::iterator IntList::end() const
 {
-    return Iterator{front_ + size_};
+    // the past-the-end object is a nullptr
+    return Iterator(nullptr);
 }
 
 // --------------------------------------
@@ -232,8 +238,8 @@ IntList::Iterator::Iterator(Element* current)
 
 IntList::Iterator& IntList::Iterator::operator++()
 {
-    // Forward march!
-    ++current_;
+    // sets the iterator's pointer to the next element in IntList
+    current_ = current_ -> next_;
     return *this;
 }
 

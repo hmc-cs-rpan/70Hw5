@@ -1,6 +1,6 @@
 /**
  * \file intlist-test.cpp
- * \authors YOUR NAME HERE
+ * \authors Iris Liu, Ricky Pan
  * \brief The program unit tests the IntList class.
  */
 
@@ -29,9 +29,7 @@ void defaultConstructorTest()
 
 /** \brief Test push_front
  *  \detail Does 1000 inserts at the front of the list.
- *     Does not (yet) check whether the resulting list contents are
- *     correct, but it's a good sign if this works without
- *     crashing or valgrind errors.
+ *          Checks the last insert at the front.
  */
 void pushFrontTest()
 {
@@ -47,11 +45,12 @@ void pushFrontTest()
     }
 
     assert(myList.size() == 1001);
+    assert(myList.frontVal() == 999);
 }
 
 /** \brief Test push_front
  *  \detail Adds 1 element to an empty IntList
- *   Front should equal pushed value, and size = 1
+ *          Front should equal pushed value, and size = 1
  */
 void pushFrontEmptyTest()
 {
@@ -66,9 +65,7 @@ void pushFrontEmptyTest()
 
 /** \brief Test push_back
  *  \detail Does 1000 inserts at the back of the list.
- *     Does not (yet) check whether the resulting list contents are
- *     correct, but it's a good sign if this works without
- *     crashing or valgrind errors.
+ * 
  */
 void pushBackTest()
 {
@@ -87,9 +84,9 @@ void pushBackTest()
     assert(myList.frontVal() == 99999);
 }
 
-/** \brief Test back
+/** \brief Test push_back on empty IntList
  *  \detail Adds 1 element from the back to an empty IntList
- *   Front should equal back, and size = 1
+ *          Size = 1
  */
 void pushBackEmptyTest()
 {
@@ -102,12 +99,38 @@ void pushBackEmptyTest()
     assert(myList.frontVal() == 99999);
 }
 
+/** \brief Test insert_after on the min case IntList
+ *  \detail Adds 2 elements to an IntList and inserts an element
+ *          in between. Checks that this list is equal to our
+ *          desired list, and checks that the added element is 
+ *          present in the list.
+ */
+void insertAfterTwoElementTest()
+{
+    std::cout << "Testing insert_after" << std::endl;
+    IntList answerList;
+    for (size_t i = 0; i != 3; ++i) {
+       answerList.push_back(i);
+    }
+
+    IntList testList;
+    testList.push_back(0);
+    testList.push_back(2);
+
+    IntList::iterator a = testList.begin();
+    testList.insert_after(a, 1);
+
+    ++a;
+    assert(*a == 1);
+    assert(answerList == testList);
+}
+
 /** \brief Test pop_front
  *  \detail Does 1000 inserts at the front of the list. And pops the
  *     first element. Checks the post-popping size and the popped
  *     element.
  */
-void popFrontTest() //COME BACK AFTER ITERATOR/DESTRUCTOR
+void popFrontTest()
 {
     std::cout << "Testing pop_front" << std::endl;
 
@@ -124,8 +147,8 @@ void popFrontTest() //COME BACK AFTER ITERATOR/DESTRUCTOR
 }
 
 /** \brief Test pop_front_empty
- *  \detail Pops one element from an empty IntList
- *   Should not pop any elements
+ *  \detail Calls pop_front on an empty IntList
+ *          Should not pop any elements. Returns 0 as default behavior
  */
 void popFrontEmptyTest()
 {
@@ -139,9 +162,8 @@ void popFrontEmptyTest()
 
 /** \brief Test copy constructor for IntLists
  *  \detail Copies a 1000-element list.
- *     Does not (yet) check whether the resulting list contents are
- *     correct, but it's a good sign if this works without
- *     crashing or valgrind errors.
+ *          Checks whether the resulting list contents are
+ *          correct. Also checks that lists are distinct.
  */
 void copyConstructorTest()
 {
@@ -158,6 +180,8 @@ void copyConstructorTest()
     // Copy the list
     IntList copyList = myList;
 
+    assert (myList == copyList);
+
     // Add more to the original list
     for (size_t i = 0; i != 1000; ++i) {
        myList.push_front(i);
@@ -169,6 +193,11 @@ void copyConstructorTest()
     assert(myList.size() == 2000);
 }
 
+/** \brief Test iterator functionality through entire IntList
+ *  \detail Loops an iterator through an IntList incrementing 
+ *          a counter to track the size of the IntList. Compares
+ *          the counter value to the IntList size.
+ */
 void intListIteratorSizeTest()
 {
     std::cout << "Testing intList iterator size" << std::endl;
@@ -184,13 +213,17 @@ void intListIteratorSizeTest()
     {
         counter++;
     }
-
     assert(counter == myList.size());
 }
 
-void intListIteratorComparisonTest()
+/** \brief Test iterator equality operator
+ *  \detail Initializes 2 iterators to equal the front of
+ *          the same IntList. Increments each by 1, and 
+ *          checks that iterators are the same.
+ */
+void intListIteratorEqualityTest()
 {
-    std::cout << "Testing intList iterator comparison" << std::endl;
+    std::cout << "Testing intList iterator equality" << std::endl;
 
     IntList myList;
     for (size_t i = 0; i != 1000; ++i) {
@@ -198,38 +231,103 @@ void intListIteratorComparisonTest()
     }
 
     IntList::iterator a = myList.begin();
-    IntList::iterator b = myList.begin();
+    IntList::iterator b = a;
+    ++a;
+    ++b;
 
     assert(a == b);
 }
 
-void intListIteratorTestOne()
+/** \brief Test iterator inequality operator
+ *  \detail Initializes 2 iterators to equal the front of
+ *          the same IntList. Increments one of them, and 
+ *          checks for inequality.
+ */
+void intListIteratorInequalityTest()
 {
-    std::cout << "Testing intList iterator one" << std::endl;
+    std::cout << "Testing intList iterator inequality " << std::endl;
 
     IntList myList;
     for (size_t i = 0; i != 1000; ++i) {
        myList.push_front(i);
     }
 
-    size_t counter = 0;
+    IntList::iterator a = myList.begin();
+    IntList::iterator b = a;
+    ++b;
+    
+    assert(a != b);
+}
 
-    for (IntList::iterator i = myList.begin(); i != myList.end(); ++i)
-    {
-        counter++;
+/** \brief Test iterator dereference operator
+ *  \detail Initializes 2 iterators to equal the front of
+ *          the same IntList. Increments each by 1, and 
+ *          checks that the values of the elements they 
+ *          point to are the same.
+ */
+void intListIteratorDeferenceTest()
+{
+    std::cout << "Testing intList iterator dereference" << std::endl;
+
+    IntList myList;
+    for (size_t i = 0; i != 1000; ++i) {
+       myList.push_front(i);
     }
 
-    assert(counter == myList.size());
+    IntList::iterator a = myList.begin();
+    IntList::iterator b = a;
+    ++a;
+    ++b;
+    assert(*a == *b);
+}
+
+
+/** \brief Test IntList equality operator
+ *  \detail Initializes 2 IntLists with the same 
+ *          values. Compares that they are equal.
+ */
+void intListEqualityTest()
+{
+    IntList firstList;
+    for (size_t i = 0; i != 1000; ++i) {
+       firstList.push_front(i);
+    }
+    IntList secondList;
+    for (size_t i = 0; i != 1000; ++i) {
+       secondList.push_front(i);
+    }
+
+    assert(firstList == secondList);
+}
+
+/** \brief Test empty IntList equality operator
+ *  \detail Initializes 2 empty IntLists.
+ *          Compares that they are equal.
+ */
+void intListEmptyEqualityTest()
+{
+    IntList firstList;
+    IntList secondList;
+    assert(firstList == secondList);
 }
 
 int main(int, const char**)
 {
-    //defaultConstructorTest();
+    defaultConstructorTest();
     pushFrontTest();
-    //pushBackTest();
-    //popFrontTest();
-    //intListIteratorTestOne();
-    //copyConstructorTest();  // uncomment this line, when you're ready
+    pushFrontEmptyTest();
+    pushBackTest();
+    pushBackEmptyTest();
+    popFrontTest();
+    popFrontEmptyTest();
+    intListIteratorSizeTest();
+    intListIteratorEqualityTest();
+    intListIteratorInequalityTest();
+    intListIteratorDereferenceTest();
+    intListEqualityTest();
+    intListEmptyEqualityTest();
+    insertAfterTwoElementTest();
+    copyConstructorTest();
 
     // Unix "success" value
     return 0;
