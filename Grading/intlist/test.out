@@ -1,0 +1,18 @@
+Test 1: OK    		(Solution's test suite)
+			Command: ./cs70-intlist-test 
+
+Test 2: OK    		(Solution's test suite [+valgrind])
+			Command: /usr/bin/valgrind -q --leak-check=full ./cs70-intlist-test
+
+Test 3: OK    		(Student test of first bad implementation)
+			Command: ./cs70-intlist-test-bad1 
+
+Test 4: OK    		(Student test of second bad implementation)
+			Command: ./cs70-intlist-test-bad2 
+
+Test 5: OK    		(Student test of third bad implementation)
+			Command: ./cs70-intlist-test-bad3 
+
+Test 6: Failed		(Student test of good implementation)
+			Command: ./cs70-intlist-test-good 
+- exited with signal 6 [Abort (Assert fail or out of memory?)]

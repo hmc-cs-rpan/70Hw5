@@ -1,0 +1,1 @@
+cs70-intlist-test-bad1: cs70-intlist-bad1.cpp:172: int IntList::pop_front(): Assertion `front_ != nullptr && back_ != nullptr' failed.
